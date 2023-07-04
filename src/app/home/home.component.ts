@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
         this.activities = this.activityService.getAll();
     })
     this.tags = this.activityService.getAllTags(this.activities);
-    //console.log(this.tags);
+    console.log(this.tags);
   }
 
 }
