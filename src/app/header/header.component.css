@@ -1,0 +1,21 @@
+header{
+    background: white;
+    padding: 0;
+    border-bottom: 1px solid #e75529;
+}
+
+a{
+    color: #e75529;
+
+}
+
+a:hover{
+    background: #ff6333;
+    color: white;
+}
+
+.container{
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}

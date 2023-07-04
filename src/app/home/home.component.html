@@ -1,0 +1,22 @@
+<app-search></app-search>
+<ul>
+  <li *ngFor="let activity of activities">
+      <a>
+        <div class="hover-div">
+          <img src="{{activity.imageUrl}}" alt="">
+        </div>
+        <div class="content">
+          <div class="name">
+            {{activity.name}}
+          </div>
+          <span class="favorite {{activity.favorite?'':'not'}}">
+            ❤
+          </span>
+          <div class="Place">
+            <span>📍</span>
+            {{activity.place}}
+          </div>
+        </div>
+      </a>
+  </li>
+</ul>
