@@ -1,16 +1,41 @@
 import { flatten } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Activity } from 'src/app/shared/models/activity';
+import { HttpClient } from '@angular/common/http'
+import { ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityService {
 
-  constructor() { }
+  instaActivities:Activity[] = [];
+
+  constructor(
+    private httpClient: HttpClient,
+  ) {
+    //const API_URL = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,timestamp,media_type,permalink,children{media_url,thumbnail_url}&access_token=IGQVJXSk0tTDduVVlBaHlSNE1JQnZAYY2NpeFgwMTc1ak9qTm5BS0s2ZAE8tTlh1Q1FTZAGQ2RWtnZAHhpVDYtTnpyY2FtN01rcENGcEN1X3ZAibDVqZAy1Xd1ZAjMWpvekJZATFNicWk2VFpwbFN6SUUzNHJOQQZDZD';
+    const API_URL = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=IGQVJXSk0tTDduVVlBaHlSNE1JQnZAYY2NpeFgwMTc1ak9qTm5BS0s2ZAE8tTlh1Q1FTZAGQ2RWtnZAHhpVDYtTnpyY2FtN01rcENGcEN1X3ZAibDVqZAy1Xd1ZAjMWpvekJZATFNicWk2VFpwbFN6SUUzNHJOQQZDZD';
+    this.httpClient.get<any>(API_URL).pipe(
+      map(value => value.data)
+    ).subscribe((results: any) => {
+        results.map((result) => {
+          const activity: Activity = {
+            id: result.id,
+            name: result.caption,
+            imageUrl: result.media_url,
+          };
+          this.instaActivities[result.id] = activity;
+        });
+      });
+      //console.log(this.instaActivities);
+  }
+
+    
 
   getAllActivitiesBySearchTerm(searchTerm: string): Activity[]{
-    return this.getAll()
+    return this.getAlllocal()
     .filter(activity => 
       activity.name
         .toLowerCase()
@@ -21,8 +46,8 @@ export class ActivityService {
   getAllActivitiesByTag(tag: string):Activity[]{
     
     return tag == "All" 
-      ? this.getAll() 
-      : this.getAll().filter(activity => 
+      ? this.getAlllocal() 
+      : this.getAlllocal().filter(activity => 
         activity.tags.includes(tag));
 
   }
@@ -32,7 +57,11 @@ export class ActivityService {
     return(flatten(tags));
   }
 
-  getAll(): Activity[]{
+  getAllInstaActivities(): Activity[]{
+    return this.instaActivities;
+  }
+
+  getAlllocal(): Activity[]{
     return [
       {
         id: 1,

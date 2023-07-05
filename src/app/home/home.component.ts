@@ -11,6 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   activities:Activity[] = [];
+  instaActivities:Activity[] = [];
+
   tags:string[] =[];
   constructor(
     private activityService:ActivityService,
@@ -19,16 +21,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
+      this.instaActivities = this.activityService.getAllInstaActivities();
       if(params.searchTerm)
         this.activities = this.activityService.getAllActivitiesBySearchTerm(params.searchTerm);
       else if(params.tag){
         this.activities = this.activityService.getAllActivitiesByTag(params.tag);
       }
       else 
-        this.activities = this.activityService.getAll();
+        this.activities = this.activityService.getAlllocal();
     })
     this.tags = this.activityService.getAllTags(this.activities);
-    console.log(this.tags);
+    console.log(this.activities);
+    console.log(this.instaActivities);
   }
 
 }

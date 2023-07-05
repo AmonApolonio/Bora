@@ -8,6 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { SearchComponent } from './search/search.component';
 import { FormsModule } from '@angular/forms';
 import { TagsComponent } from './tags/tags.component';
+import { ActivityService } from './services/activity/activity.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -21,8 +24,12 @@ import { TagsComponent } from './tags/tags.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    CommonModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    ActivityService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
