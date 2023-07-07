@@ -8,9 +8,8 @@ const colors = require('colors');
 require('dotenv').load();
 
 // `environment.ts` file structure
-//API_TOKEN: '${process.env.API_TOKEN}',
 const envConfigFile = `export const environment = {
-    API_TOKEN: 'AAAAAAAAAAAA',
+    API_TOKEN: '${process.env.API_TOKEN}',
 };
 `;
 
