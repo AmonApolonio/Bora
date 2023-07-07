@@ -1,150 +1,208 @@
 import { flatten } from '@angular/compiler';
 import { Injectable } from '@angular/core';
-import { Activity } from 'src/app/shared/models/activity';
 import { HttpClient } from '@angular/common/http'
-import { ReplaySubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+const API_TOKEN = environment.API_TOKEN
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityService {
 
-  instaActivities:Activity[] = [];
-
+  apiUrl = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=' + API_TOKEN;
+  
+  allTags$:Observable<number>[];
+ 
   constructor(
     private httpClient: HttpClient,
-  ) {
-    //const API_URL = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,timestamp,media_type,permalink,children{media_url,thumbnail_url}&access_token=IGQVJXSk0tTDduVVlBaHlSNE1JQnZAYY2NpeFgwMTc1ak9qTm5BS0s2ZAE8tTlh1Q1FTZAGQ2RWtnZAHhpVDYtTnpyY2FtN01rcENGcEN1X3ZAibDVqZAy1Xd1ZAjMWpvekJZATFNicWk2VFpwbFN6SUUzNHJOQQZDZD';
-    const API_URL = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=IGQVJXSk0tTDduVVlBaHlSNE1JQnZAYY2NpeFgwMTc1ak9qTm5BS0s2ZAE8tTlh1Q1FTZAGQ2RWtnZAHhpVDYtTnpyY2FtN01rcENGcEN1X3ZAibDVqZAy1Xd1ZAjMWpvekJZATFNicWk2VFpwbFN6SUUzNHJOQQZDZD';
-    this.httpClient.get<any>(API_URL).pipe(
-      map(value => value.data)
-    ).subscribe((results: any) => {
-        results.map((result) => {
-          const activity: Activity = {
-            id: result.id,
-            name: result.caption,
-            imageUrl: result.media_url,
-          };
-          this.instaActivities[result.id] = activity;
-        });
-      });
-      //console.log(this.instaActivities);
+  ) {}
+
+
+  getAllInstaActivities(){
+    return this.httpClient.get<any>(this.apiUrl)
+    //Filter only the data array
+      .pipe(map(value => value.data
+    
+    // Get all tags from hashtags in the caption
+      .map(value => {
+        //in this case getting rid of the #symbol is nescessary to avoid url conflict
+        //Also replacing _ symbols with spaces so on Instagram you can type the hashtag
+        //like #ar_livre and the site will show "ar livre"
+        value.tags = value.caption.match(/#\w+/g).map(v => {
+          v = v.replace('#', '');
+          v = v[0].toUpperCase() + v.substr(1).toLowerCase();
+          v = v.replace('_', ' ');
+          return v
+        }); 
+        // Get filter out all hashtags from the caption
+        value.caption = value.caption.split(" ").map(v => {
+          if(v.startsWith("#")){
+            v = "";
+          }
+          return v;
+        }).join(" ")
+        return value
+        }
+      )
+      )
+      )
   }
 
-    
+  // Get all tags from the posts and return a list 
+  getAllInstaTags(){
+    return this.getAllInstaActivities().pipe(map(value => {
+      value.allTagsRaw = []
+      value.allTags = []
+      for(var i=0; i<value.length; i++){
+          value.allTagsRaw.push(value[i].tags);
+      }
 
-  getAllActivitiesBySearchTerm(searchTerm: string): Activity[]{
-    return this.getAlllocal()
-    .filter(activity => 
-      activity.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()));
+      //Make the array of arrays into just one array and filter repeting tags
+      value.allTagsRaw = flatten(value.allTagsRaw)
+      for(var i=0; i<value.allTagsRaw.length; i++){
+        if (!value.allTags.includes(value.allTagsRaw[i])){
+          value.allTags.push(value.allTagsRaw[i]);  
+        }
+      }
+      return value.allTags;
+    }));
   }
 
   
-  getAllActivitiesByTag(tag: string):Activity[]{
+  //Filter all activities by their caption compared to the search term received
+  getAllInstaActivitiesBySearchTerm(searchTerm: string){
+    return this.getAllInstaActivities().pipe(map(value => value.filter(
+           activity => 
+            activity.caption
+             .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+       )))
+  }
+
+  //Filter all activities by their tags compared to the tag received
+  getAllInstaActivitiesByTag(tag: string){
+    return tag == "All"
+       ? this.getAllInstaActivities() 
+       : this.getAllInstaActivities().pipe(map(value => value.filter(
+        activity => 
+         activity.tags
+         .includes(tag)
+    )))
+  }
+
+
+//Local Test
+
+//   getAllLocalActivitiesBySearchTerm(searchTerm: string): Activity[]{
+//     return this.getAlllocal()
+//     .filter(activity => 
+//       activity.caption
+//         .toLowerCase()
+//         .includes(searchTerm.toLowerCase()));
+//   }
+
+  
+//   getAllLocalActivitiesByTag(tag: string):Activity[]{
     
-    return tag == "All" 
-      ? this.getAlllocal() 
-      : this.getAlllocal().filter(activity => 
-        activity.tags.includes(tag));
+//     return tag == "All" 
+//       ? this.getAlllocal() 
+//       : this.getAlllocal().filter(activity => 
+//         activity.tags.includes(tag));
 
-  }
+//   }
 
-  getAllTags(activities:Activity[]):string[]{
-    let tags = activities.map(tag => tag.tags);
-    return(flatten(tags));
-  }
+//   getAllTags(activities:Activity[]):string[]{
+//     let tags = activities.map(tag => tag.tags);
+//     return(flatten(tags));
+//   }
 
-  getAllInstaActivities(): Activity[]{
-    return this.instaActivities;
-  }
-
-  getAlllocal(): Activity[]{
-    return [
-      {
-        id: 1,
-        name: 'basquete',
-        imageUrl:'assets/images/basquete.png',
-        place:'Sococaba',
-        favorite: true,
-        tags: ['Esporte',],
-      },
-      {
-        id: 2,
-        name: 'bicicleta',
-        imageUrl:'assets/images/bicicleta.jpg',
-        place:'Sococaba',
-        tags: ['Esporte', 'Teste'],
-      },
-      {
-        id: 3,
-        name: 'cartas',
-        imageUrl:'assets/images/cartas.webp',
-        place:'Sococaba',
-        tags: ['Indoors',],
-      },
-      {
-        id: 4,
-        name: 'cinema',
-        imageUrl:'assets/images/cinema.jpg',
-        place:'Sococaba',
-        favorite: true,
-        tags: ['Outdoors',],
-      },
-      {
-        id: 5,
-        name: 'cozinhar',
-        imageUrl:'assets/images/cozinhar.jpg',
-        place:'Sococaba',
-        favorite: true,
-        tags: ['Indoors',],
-      },
-      {
-        id: 6,
-        name: 'futebol',
-        imageUrl:'assets/images/futebol.jpg',
-        place:'Sococaba',
-        tags: ['Esporte',],
-      },
-      {
-        id: 7,
-        name: 'games',
-        imageUrl:'assets/images/games.webp',
-        place:'Sococaba',
-        tags: ["Indoors",],
-      },
-      {
-        id: 8,
-        name: 'tabuleiro',
-        imageUrl:'assets/images/tabuleiro.webp',
-        place:'Sococaba',
-        tags: ['Indoors',],
-      },
-      {
-        id: 9,
-        name: 'tenis',
-        imageUrl:'assets/images/tenis.jpg',
-        place:'Sococaba',
-        favorite: true,
-        tags: ['Esporte',],
-      },
-      {
-        id: 10,
-        name: 'trilha',
-        imageUrl:'assets/images/trilha.jpg',
-        place:'Sococaba',
-        tags: ['Outdoors',],
-      },
-      {
-        id: 11,
-        name: 'volei',
-        imageUrl:'assets/images/volei.jpg',
-        place:'Sococaba',
-        favorite: true,
-        tags: ['Esporte',],
-      },
-    ]
-  }
+//   getAlllocal(): Activity[]{
+//     return [
+//       {
+//         id: 1,
+//         caption: 'basquete',
+//         media_url:'assets/images/basquete.png',
+//         place:'Sococaba',
+//         favorite: true,
+//         tags: ['Esporte',],
+//       },
+//       {
+//         id: 2,
+//         caption: 'bicicleta',
+//         media_url:'assets/images/bicicleta.jpg',
+//         place:'Sococaba',
+//         tags: ['Esporte', 'Teste'],
+//       },
+//       {
+//         id: 3,
+//         caption: 'cartas',
+//         media_url:'assets/images/cartas.webp',
+//         place:'Sococaba',
+//         tags: ['Indoors',],
+//       },
+//       {
+//         id: 4,
+//         caption: 'cinema',
+//         media_url:'assets/images/cinema.jpg',
+//         place:'Sococaba',
+//         favorite: true,
+//         tags: ['Outdoors',],
+//       },
+//       {
+//         id: 5,
+//         caption: 'cozinhar',
+//         media_url:'assets/images/cozinhar.jpg',
+//         place:'Sococaba',
+//         favorite: true,
+//         tags: ['Indoors',],
+//       },
+//       {
+//         id: 6,
+//         caption: 'futebol',
+//         media_url:'assets/images/futebol.jpg',
+//         place:'Sococaba',
+//         tags: ['Esporte',],
+//       },
+//       {
+//         id: 7,
+//         caption: 'games',
+//         media_url:'assets/images/games.webp',
+//         place:'Sococaba',
+//         tags: ["Indoors",],
+//       },
+//       {
+//         id: 8,
+//         caption: 'tabuleiro',
+//         media_url:'assets/images/tabuleiro.webp',
+//         place:'Sococaba',
+//         tags: ['Indoors',],
+//       },
+//       {
+//         id: 9,
+//         caption: 'tenis',
+//         media_url:'assets/images/tenis.jpg',
+//         place:'Sococaba',
+//         favorite: true,
+//         tags: ['Esporte',],
+//       },
+//       {
+//         id: 10,
+//         caption: 'trilha',
+//         media_url:'assets/images/trilha.jpg',
+//         place:'Sococaba',
+//         tags: ['Outdoors',],
+//       },
+//       {
+//         id: 11,
+//         caption: 'volei',
+//         media_url:'assets/images/volei.jpg',
+//         place:'Sococaba',
+//         favorite: true,
+//         tags: ['Esporte',],
+//       },
+//     ]
+//   }
 }

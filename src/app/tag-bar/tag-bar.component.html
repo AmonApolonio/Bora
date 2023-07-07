@@ -1,0 +1,11 @@
+<div>
+  <span>
+    Filter:
+  </span>
+  <a routerLink="/tag/All">
+    All
+  </a>
+  <a *ngFor="let tag of (tags$ | async) as tags" routerLink="/tag/{{tag}}">
+    {{tag}}
+  </a>
+</div>

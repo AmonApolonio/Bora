@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivityService } from '../services/activity/activity.service';
 import { Activity } from '../shared/models/activity';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-home',
@@ -11,9 +13,9 @@ import { ActivatedRoute } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   activities:Activity[] = [];
-  instaActivities:Activity[] = [];
+  activities$:Observable<Activity[]>;
+  tags$:Observable<any>;
 
-  tags:string[] =[];
   constructor(
     private activityService:ActivityService,
     private route:ActivatedRoute,
@@ -21,18 +23,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.instaActivities = this.activityService.getAllInstaActivities();
+       //this.activities$.subscribe(value => console.log(value));
+       //to check the value in comming from the Activity Service
       if(params.searchTerm)
-        this.activities = this.activityService.getAllActivitiesBySearchTerm(params.searchTerm);
+        this.activities$ = this.activityService.getAllInstaActivitiesBySearchTerm(params.searchTerm);
       else if(params.tag){
-        this.activities = this.activityService.getAllActivitiesByTag(params.tag);
+        this.activities$ = this.activityService.getAllInstaActivitiesByTag(params.tag);
+        this.activities$.subscribe(value => console.log(value));
       }
       else 
-        this.activities = this.activityService.getAlllocal();
+        this.activities$ = this.activityService.getAllInstaActivities();
     })
-    this.tags = this.activityService.getAllTags(this.activities);
-    console.log(this.activities);
-    console.log(this.instaActivities);
+    
   }
 
 }

@@ -1,0 +1,26 @@
+div{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div span{
+    padding: .3rem;
+    margin: .2rem;
+    font-weight: 600;
+    color: #e75529;
+}
+
+div a{
+    background-color: #f0f0f0;
+    padding: .3rem 1rem;
+    margin: .2rem .15rem;
+    border-radius: 10rem;
+    font-weight: 600;
+    color: #e75529;
+}
+
+div a:hover{
+    background: #ff6333;
+    color: white;
+}
