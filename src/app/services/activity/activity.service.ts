@@ -22,9 +22,6 @@ export class ActivityService {
 
 
   getAllInstaActivities(){
-    console.log("test");
-    console.log(API_TOKEN);
-    console.log(this.apiUrl);
     return this.httpClient.get<any>(this.apiUrl)
     //Filter only the data array
       .pipe(map(value => value.data
