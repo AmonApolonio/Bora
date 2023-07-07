@@ -12,7 +12,7 @@ const API_TOKEN = environment.API_TOKEN
 })
 export class ActivityService {
 
-  apiUrl = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=' + API_TOKEN;
+  apiUrl = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=IGQVJYdERZARnBNSWp3WVFFVVcyTHRmOUhlUlQwYUoyQWdxTEpGNUduT2RPOWI1WUd0a3F6aHRtbzBxeGhNNGx' + API_TOKEN;
   
   allTags$:Observable<number>[];
  
