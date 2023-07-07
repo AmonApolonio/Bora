@@ -3,6 +3,9 @@ import { writeFile } from 'fs';
 // Configure Angular `environment.ts` file path
 const targetPath = './src/environments/environment.ts';
 
+const fs = require('fs')
+fs.writeFileSync('./.env', `API_TOKEN=${process.env.API_TOKEN}\n`)
+
 // Load node modules
 const colors = require('colors');
 require('dotenv').load();
