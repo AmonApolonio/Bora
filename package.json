@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
+    "config": "ts-node set-env.ts",
+    "start": "npm run config && ng serve",
+    "build": "npm run config && ng build",
+    "test": "npm run config && ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -22,7 +23,9 @@
     "@angular/router": "^6.0.3",
     "core-js": "^2.5.4",
     "rxjs": "6.0.0",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "colors": "^1.1.2",
+    "dotenv": "^5.0.0"
   },
   "devDependencies": {
     "@angular/compiler-cli": "^6.0.3",
