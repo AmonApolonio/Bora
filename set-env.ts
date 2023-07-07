@@ -8,8 +8,9 @@ const colors = require('colors');
 require('dotenv').load();
 
 // `environment.ts` file structure
+//GamNaVlJ5cDV0M19ZAYV9pRHFYS2pnLXRNOHVjWkxEUUN4RDVvRTF6YnpLakJwS0VYWAZDZD
 const envConfigFile = `export const environment = {
-    API_TOKEN: 'GamNaVlJ5cDV0M19ZAYV9pRHFYS2pnLXRNOHVjWkxEUUN4RDVvRTF6YnpLakJwS0VYWAZDZD',
+    API_TOKEN: '',
 };
 `;
 
