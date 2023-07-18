@@ -1,0 +1,23 @@
+<app-search></app-search>
+<app-tag-bar></app-tag-bar>
+<ul>
+  <li *ngFor="let activity of (activities$ | async) as activities">
+      <a>
+        <div class="hover-div">
+          <img src="{{activity.media_url}}" alt="">
+        </div>
+        <div class="content">
+          <div class="name">
+            {{activity.caption}}
+          </div>
+          <span class="favorite {{activity.favorite?'':'not'}}">
+            ❤
+          </span>
+          <div class="Place">
+            <span>📍</span>
+            {{activity.tags}}
+          </div>
+        </div>
+      </a>
+  </li>
+</ul> 

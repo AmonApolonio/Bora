@@ -1,0 +1,55 @@
+ul{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+}
+
+li a{
+    height: 20rem;
+    width: 20rem;
+    border: 1px solid whitesmoke;
+    border-radius: 1rem;
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #e75529;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition-duration: 0.75s;
+    
+}
+
+.hover-div{
+    height: 70%;
+    overflow: hidden;
+}
+
+li a:hover img{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.favorite.not{
+    color: gray;
+}
+
+.content {
+    padding: .5rem 1rem;
+    position: relative;
+}
+
+.favorite{
+    position: absolute;
+    top: .5rem;
+    right: 1rem;
+    font-size: 1.2rem;
+}
+
