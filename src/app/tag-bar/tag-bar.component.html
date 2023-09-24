@@ -1,4 +1,29 @@
-<div>
+
+
+
+	<div class="listContainer">
+        <a class="item" *ngFor="let tag of tags as tags" routerLink="/tag/All">
+          <div class="image">
+            <img src="../assets/filter_icon.svg" alt="filter">
+          </div>
+          <div class="tagText">{{tag}}</div>
+        </a>
+  </div>
+
+
+
+
+<!-- <div class="tagList">
+  <a *ngFor="let tag of (tags$ | async) as tags" routerLink="/tag/All">
+  <div class="image">
+    <img src="../assets/filter_icon.svg" alt="filter">
+  </div>
+  <span>{{tag}}</span>
+  </a>
+</div> -->
+
+
+<!-- <div>
     <span>
       Filter:
     </span>
@@ -8,5 +33,5 @@
     <a *ngFor="let tag of (tags$ | async) as tags" routerLink="/tag/{{tag}}">
       {{tag}}
     </a>
-  </div>
+  </div> -->
   

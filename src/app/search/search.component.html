@@ -1,7 +1,7 @@
-<div>
-    <input type="text" placeholder="Procure um rolê!" [(ngModel)]="searchTerm" (change)="search()">
-    <button (click)="search()">Procurar</button>
-</div>
+<li>
+    <input type="text" placeholder="O que você procura?" [(ngModel)]="searchTerm" (change)="search()">
+    <div><button (click)="search()">Procurar</button></div>
+</li>
   
   <!--
     Use (keyup)="search() if you want to results to uptade while the user is typing 

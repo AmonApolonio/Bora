@@ -1,0 +1,16 @@
+
+<section class="list-with-scroll">
+
+	<div class="list" appScrollable #list="appScrollable" [scrollUnit]="300">
+		<div *ngFor="let tag of (tags$ | async) as tags let last=last let first=first" >
+      		<a class="item" routerLink="/tag/{{tag}}" *ngIf="!first && !last">
+        		<span>{{tag}}</span>
+      		</a>
+    	</div>
+	</div>
+
+	<button class="scroll-button left" *ngIf="list.isOverflow" [class.disable]="!list.canScrollStart" (click)="list.scroll(-1)" id="scroll-left">&#8678;</button>
+	<!-- <div class="teste" [class.disable]="!list.canScrollStart" id="scroll-left"></div>
+	<div class="teste" [class.disable]="!list.canScrollEnd"></div> -->
+	<button class="scroll-button right" *ngIf="list.isOverflow"  [class.disable]="!list.canScrollEnd" (click)="list.scroll(1)">&#8680;</button>
+</section>

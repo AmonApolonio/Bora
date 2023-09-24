@@ -1,0 +1,44 @@
+
+.photosContainer{
+    list-style-type: none;  
+}
+
+.mainPhoto{
+    float: right;
+    margin: 50px 0px 0px 0px;
+    width: 400px;
+    height: 400px;
+    border-radius: 5%;
+    object-fit: cover;
+}
+
+.listMiniatures{
+    float: right;
+    list-style-type: none;
+    padding: 15px 5px 5px 5px;
+}
+
+.photoMiniature{
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.textContainer{
+    padding-left: 50px;
+}
+
+.title{
+    display: block;
+    margin: 50px 0px 0px 0px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+}
+
+.description{
+    display: block;
+    margin: 50px 0px 0px 0px;
+    // font-size: clamp(2rem, 4vw, 3rem);
+    // font-weight: 900;
+}

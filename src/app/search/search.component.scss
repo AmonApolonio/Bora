@@ -1,4 +1,6 @@
-div{
+@import "/src/styles.scss";
+
+li{
     display: flex;
     justify-content: center;
     margin-top: 3rem;
@@ -7,26 +9,30 @@ div{
     margin-right: 1rem;
 }
 
-div input{
+li input{
     border-radius: 10rem 0 0 10rem;
     border: none;
     height: 3rem;
-    width: 20rem;
-    background-color: #f1f1f1;
+    width: calc(20em + 20vw);
+    background-color: white;
     padding: 1.2rem;
     font-size: 1rem;
     font-weight: 500;
     outline: none;
 }
 
-div button {
-    color: grey;
-    height: 3rem;
-    width: 6rem;
-    font-size: 1rem;
+div{
+    background-color: white;
     border-radius: 0 10rem 10rem 0;
+}
+
+div button {
+    height: 3rem;
+    width: 9rem;
+    font-size: 1rem;
+    border-radius: 0 10rem 10rem 20rem;
     border: none;
-    background-color: #e75529;
+    background-color: $main-color;
     color: white;
     opacity: 0.8;
     outline: none;

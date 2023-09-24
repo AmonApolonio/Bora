@@ -1,6 +1,21 @@
+<div class="titleContainer">
+  <span class="title">
+    Encontre um Grupo de Amigos
+  </span>
+</div>
+<!-- <div
+    *ngIf="isMobile"
+    style="background-color: red;">
+    <span>AAAAAAAAAAAAAAAA</span>
+</div> -->
 <app-search></app-search>
-<app-tag-bar></app-tag-bar>
-<ul>
+<!-- <app-tag-bar></app-tag-bar> -->
+<app-all-tags-bar></app-all-tags-bar>
+<div *ngIf="activities$ | async as activities">
+  <app-activity-list [activities] = "activities"></app-activity-list>
+</div>
+
+<!-- <ul>
   <li *ngFor="let activity of (activities$ | async) as activities">
       <a>
         <div class="hover-div">
@@ -13,11 +28,12 @@
           <span class="favorite {{activity.favorite?'':'not'}}">
             ❤
           </span>
-          <div class="Place">
-            <span>📍</span>
-            {{activity.tags}}
+          <div class="tagList">
+            <div class="tag" *ngFor="let tag of activity.tags">
+              <span>{{tag}}</span>
+            </div>
           </div>
         </div>
       </a>
   </li>
-</ul> 
+</ul>  -->

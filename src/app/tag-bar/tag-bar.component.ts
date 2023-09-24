@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ActivityService } from 'src/app/services/activity/activity.service';
 
 
@@ -10,17 +9,22 @@ import { ActivityService } from 'src/app/services/activity/activity.service';
 })
 export class TagBarComponent implements OnInit {
 
-  tags$:Observable<any> = new Observable<any>;
+  tags:string[] = [
+    "ORM",
+    "JAS",
+    "Esporte",
+    "Bailes",
+    "Rolês",
+    "Jogos",
+    "Ar livre",
+    "Todas as Tags",
+  ];
 
   constructor(
     private activityService: ActivityService,
   ) { }
 
   ngOnInit() {
-    this.tags$ = this.activityService.getAllInstaTags();
-    // this.tags$.subscribe(value => {
-    //   console.log(value)
-    // });
   }
 
 }

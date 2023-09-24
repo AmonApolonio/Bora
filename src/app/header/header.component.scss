@@ -1,16 +1,25 @@
+@import "/src/styles.scss";
+
 header{
-    background: white;
+    background: $white-dark;
     padding: 0;
-    border-bottom: 1px solid #e75529;
+    white-space: nowrap;
+}
+
+.menu{
+    background-color: red;
+    padding: 10px;
 }
 
 a{
-    color: #e75529;
-
+    font-size: calc(.5em + 0.4vw);
+    font-weight: 500;
+    color: $gray;
+    margin-left: calc(.5em + 0.2vw);
 }
 
 a:hover{
-    background: #ff6333;
+    background: $main-color;
     color: white;
 }
 
@@ -19,3 +28,13 @@ a:hover{
     display: flex;
     justify-content: space-between;
 }
+
+nav ul{
+    list-style-type: none;
+    margin: 0;
+  }
+  
+.menuitem{
+    padding: 1em;
+    display: inline-block;
+  }

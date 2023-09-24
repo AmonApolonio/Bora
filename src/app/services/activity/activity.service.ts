@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { map, tap, concatAll } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Activity } from 'src/app/shared/models/activity';
 
 const API_TOKEN = environment.API_TOKEN
 
@@ -11,8 +12,8 @@ const API_TOKEN = environment.API_TOKEN
 })
 export class ActivityService {
 
-  apiUrl = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=IGQVJYdERZARnBNSWp3WVFFVVcyTHRmOUhlUlQwYUoyQWdxTEpGNUduT2RPOWI1WUd0a3F6aHRtbzBxeGhNNGx' + API_TOKEN;
-  
+  apiUrl = 'https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=IGQWRQY2RIcjRqVHJNejBkLW52NUpBbTZAvOVR6LUNGTWF4bUVOS' + API_TOKEN;
+  allActivities:Activity[] = [];
   allTags$:Observable<number>[] = [];
  
   constructor(
@@ -43,11 +44,17 @@ export class ActivityService {
           }
           return v;
         }).join(" ")
+        .replace(/ *\([^)]*\) */g, "")
+        .replace(/ *\{[^)]*\} */g, "")
+        .replace(/ *\=[^)]*\= */g, "")
+        .replace(/ *\[[^)]*\] */g, "")
         return value
         }
       )
       )
       )
+    
+     
   }
 
   // Get all tags from the posts and return a list 
@@ -91,6 +98,44 @@ export class ActivityService {
          activity.tags
          .includes(tag)
     )))
+  }
+
+  //Filter all activities by their tags compared to the tag received
+  getDetailsInstaActivityById(id: number){
+    var detailsApiUrl = 'https://graph.instagram.com/'+id+'?fields=id,caption,media_url,permalink,children{media_url,thumbnail_url}&access_token=IGQWRQY2RIcjRqVHJNejBkLW52NUpBbTZAvOVR6LUNGTWF4bUVOS' + API_TOKEN;
+    
+    return this.httpClient.get<any>(detailsApiUrl)
+    //Filter only the data array
+    .pipe(map((value:any) => {
+      value.description = value.caption.match(/\(([^)]+)\)/) ? value.caption.match(/\(([^)]+)\)/) : "";
+      value.link = value.caption.match(/\[([^)]+)\]/) ? value.caption.match(/\[([^)]+)\]/)[1]  : "";
+      value.location = value.caption.match(/\=([^)]+)\=/) ? value.caption.match(/\=([^)]+)\=/)[1] : "";
+      value.creatorName = value.caption.match(/\{([^)]+)\}/) ? value.caption.match(/\{([^)]+)\}/)[1] : "";
+      //in this case getting rid of the #symbol is nescessary to avoid url conflict
+      //Also replacing _ symbols with spaces so on Instagram you can type the hashtag
+      //like #ar_livre and the site will show "ar livre"
+      value.tags = value.caption.match(/#\w+/g).map((v:any) => {
+        v = v.replace('#', '');
+        v = v[0].toUpperCase() + v.substr(1).toLowerCase();
+        v = v.replace('_', ' ');
+        return v
+      }); 
+      // Get filter out all hashtags from the caption
+      value.caption = value.caption.split(" ").map((v:any) => {
+        if(v.startsWith("#")){
+          v = "";
+        }
+        return v;
+      }).join(" ")
+      .replace(/ *\([^)]*\) */g, "")
+      .replace(/ *\{[^)]*\} */g, "")
+      .replace(/ *\=[^)]*\= */g, "")
+      .replace(/ *\[[^)]*\] */g, "")
+      
+      return value
+      }
+    )
+    );
   }
 
 

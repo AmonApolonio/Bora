@@ -11,6 +11,11 @@ import { ActivityService } from './services/activity/activity.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { TagBarComponent } from './tag-bar/tag-bar.component';
+import { ScrollableDirective } from './shared/directives/scrollable.directive';
+import { AllTagsBarComponent } from './all-tags-bar/all-tags-bar.component';
+import { ActivityListComponent } from './activity-list/activity-list.component';
+import { ActivityDetailsComponent } from './activity-details/activity-details.component';
+import { CreateActivityComponent } from './create-activity/create-activity.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +24,11 @@ import { TagBarComponent } from './tag-bar/tag-bar.component';
     HomeComponent,
     SearchComponent,
     TagBarComponent,
+    ScrollableDirective,
+    AllTagsBarComponent,
+    ActivityListComponent,
+    ActivityDetailsComponent,
+    CreateActivityComponent,
   ],
   imports: [
     BrowserModule,

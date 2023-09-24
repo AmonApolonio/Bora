@@ -1,0 +1,32 @@
+<div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+    <div>
+        <ul class="photosContainer">
+            <li *ngIf="mainPhoto">
+                <img class="mainPhoto" src="{{mainPhoto}}" alt="">
+            </li>
+            <li style="padding-left: 10px;">
+                <ul *ngFor="let photo of activityPhotos" class="listMiniatures">
+                    <li>
+                        <button 
+                            (click)="mainPhoto = photo.media_url"
+                            style="border: none; background: none; padding: 0;">
+                            <img 
+                                class="photoMiniature" 
+                                src="{{photo.media_url}}"
+                                [style.opacity]="mainPhoto == photo.media_url ? 1 : 0.5"
+                            >
+                        </button>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="textContainer">
+        <span class="title">{{activity.caption}}</span>
+        <span>{{activity.tags}}</span>
+        <span class="description">{{activity.description}}</span>
+        <a :href="http://{{activity.link}}" target="_blank" class="description">{{activity.link}}</a>
+        <span class="description">{{activity.creatorName}}</span>
+        <span class="description">{{activity.location}}</span>
+    </div>
+</div>

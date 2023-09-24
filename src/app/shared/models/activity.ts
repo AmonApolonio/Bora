@@ -4,6 +4,10 @@ export class Activity{
     media_url!:string;
     place?:string;
     tags?:string[];
+    description?:string;
+    link?:string;
+    location?:string;
+    creatorName?:string;
+    children?:any[];
     favorite?:boolean=false;
-    //stars:number=0;
 }

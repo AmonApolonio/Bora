@@ -1,0 +1,60 @@
+@import "/src/styles.scss";
+
+
+.list-with-scroll {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+  
+  .list{
+    flex-grow: 1;
+    display: flex;
+    overflow-x: scroll;
+    align-items: center;
+    max-width: 70vw;
+  }
+  
+  .list::-webkit-scrollbar{
+    display: none;
+  }
+  
+  .item{
+    margin-left: 20px;
+    padding: 5px 15px 5px 15px;
+    border-radius: 10px;
+    background-color: $main-color;
+    display: flex;
+    text-align: center;
+
+    span{
+      white-space: nowrap;
+      color: black;
+    }
+  }
+  
+  .scroll-button,
+  .scroll-button:hover {
+    min-width: 50px;
+    font-size: 28px;
+
+    box-shadow: none;
+    border: none;
+    border-radius: 5px;
+    color: $main-color;
+  }
+
+  .disable,
+  .disable:hover {
+    display: none;
+  }
+  
+  #scroll-left{
+    order: -1; /* To pevent ExpressionChangedAfterItHasBeenCheckedError */
+  }
+  
+
+img{
+    width: 4rem;
+    }
